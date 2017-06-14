@@ -37,7 +37,7 @@ $carrossel_posts = $Carrossel::get_posts();
                             <div class="carousel-caption">
                                 <a href="<?php the_permalink(); ?>"><?php the_title( '<h3>', '</h3>' ); ?></a>
                                 <p>
-                                    <?php the_excerpt(); ?>
+                                    <?php echo limitatexto(get_the_excerpt(), " [...]", 600); ?>
                                 </p>
                             </div>
                         </div>

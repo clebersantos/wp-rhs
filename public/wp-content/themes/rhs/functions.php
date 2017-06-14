@@ -392,12 +392,12 @@ function limitatexto($texto, $final, $limite){
     $len_final = strlen($final);
     
     if ($len_texto + $len_final > $limite){
-      for ($i=$limite-$len_final;$i!==-1;$i--){
-        if (substr($texto, $i, 1) == " " and substr($texto, $i-1, 1) !== " "){
-        return substr($texto, 0, $i).$final;
-        break;
+        for ($i=$limite-$len_final;$i!==-1;$i--){
+            if (substr($texto, $i, 1) == " " && substr($texto, $i-1, 1) !== " "){
+                return substr($texto, 0, $i).$final;
+                break;
+            }
         }
-          }
-        }
-        return $texto;
+    }
+    return $texto;
 }
