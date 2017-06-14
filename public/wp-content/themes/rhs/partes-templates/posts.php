@@ -1,5 +1,16 @@
 <div class="panel panel-default display-panel">
     <div class="panel-heading">
+        <a href="<?php the_permalink(); ?>"><?php the_title( '<h3 class="panel-title">', '</h3>' ); ?></a>
+        <?php if ( has_post_thumbnail() ) : ?>
+            <a href="<?php the_permalink(); ?>">
+                <img src="<?php echo get_the_post_thumbnail_url() ?>" alt="">
+            </a>
+            <?php
+        endif;
+        the_excerpt();
+        ?>
+    </div>
+    <div class="panel-body">
         <?php $userOBJ = new RHSUser( get_the_author_meta( 'ID' ) ); ?>
         <div class="post-titulo espacamento-topo">
             <div class="img-usuario">
@@ -20,17 +31,6 @@
             </div>
             <div class="clearfix"></div>
         </div>
-    </div>
-    <div class="panel-body">
-        <a href="<?php the_permalink(); ?>"><?php the_title( '<h3 class="panel-title">', '</h3>' ); ?></a>
-        <?php if ( has_post_thumbnail() ) : ?>
-            <a href="<?php the_permalink(); ?>">
-                <img src="<?php echo get_the_post_thumbnail_url() ?>" alt="">
-            </a>
-            <?php
-        endif;
-        the_excerpt();
-        ?>
     </div><!-- .paine-body -->
     <div class="panel-footer">
         <div class="row">

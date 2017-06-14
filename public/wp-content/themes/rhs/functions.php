@@ -381,3 +381,23 @@ function wpse_139269_term_radio_checklist( $args ) {
 }
 
 
+function wpdocs_custom_excerpt_length( $length ) {
+    return 1200;
+}
+add_filter( 'excerpt_length', 'wpdocs_custom_excerpt_length', 999 );
+
+function limitatexto($texto, $final, $limite){
+    $result = $texto;
+    $len_texto = strlen($texto);
+    $len_final = strlen($final);
+    
+    if ($len_texto + $len_final > $limite){
+      for ($i=$limite-$len_final;$i!==-1;$i--){
+        if (substr($texto, $i, 1) == " " and substr($texto, $i-1, 1) !== " "){
+        return substr($texto, 0, $i).$final;
+        break;
+        }
+          }
+        }
+        return $texto;
+}

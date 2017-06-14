@@ -604,8 +604,9 @@ h1.titulo-page {
 .display-panel {
     display: inline-block;
     margin: .8em;
-    padding: 0;
+    padding: 0;    
     width: 98%;
+    min-height: 566px;
 }
 
 /*Fim do redimensionamento responsivo do painel*/

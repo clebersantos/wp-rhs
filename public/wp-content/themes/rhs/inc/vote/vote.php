@@ -280,7 +280,7 @@ Class RHSVote {
         }
 
         $this->add_vote( $_POST['post_id'], get_current_user_id() );
-        $box = $this->get_vote_box( $_POST['post_id'], false);
+        $box = $this->get_vote_box( $_POST['post_id'], array('echo' => false));
 
         $json = array('success' => $box);
         echo json_encode($json);
@@ -353,9 +353,15 @@ Class RHSVote {
 
 	}
 
-	function get_vote_box( $post_id, $echo = true ) {
+	function get_vote_box( $post_id, $args = array() ) {
+        
+        $defaults = array(
+            'display_button' => true,
+            'echo' => true
+        );
+        $args = array_merge($defaults, $args);
 
-		$output     = '<div id="votebox-' . $post_id . '">';
+		$output     = '<div id="votebox-' . $post_id . '" class="votebox">';
 		$totalVotes = $this->get_total_votes( $post_id );
 
 		if ( empty( $totalVotes ) ) {
@@ -374,17 +380,21 @@ Class RHSVote {
 		// Se o usuário ja votou neste post, não aparece o botão e aparece de alguma maneira que indique q ele já votou
 		// Se ele não estiver logado, aparece só o texto "Votos"
 
-        if(! is_user_logged_in()){
+        if(! is_user_logged_in() || $args['display_button'] == false){
             $output .= '<span class="vTexto">'.$textVotes.'</span>';
         }  else if($this->user_has_voted( $post_id )) {
-            $output .= '<span class="vButton"><a class="btn btn-danger" data-post_id="' . $post_id . '" disabled><i class="glyphicon glyphicon-ok"></i></a></span>';
+            if($args['display_button']){
+                $output .= '<span class="vButton"><a class="btn btn-danger" data-post_id="' . $post_id . '" disabled><i class="glyphicon glyphicon-ok"></i></a></span>';
+            }
         } else {
-            $output .= '<span class="vButton"><a class="btn btn-danger js-vote-button" data-post_id="' . $post_id . '">VOTAR</a></span>';
+            if($args['display_button']){
+                $output .= '<span class="vButton"><a class="btn btn-danger js-vote-button" data-post_id="' . $post_id . '">VOTAR</a></span>';
+            }
         }
 
 		$output .= '</div>';
 
-		if ( $echo ) {
+		if ( $args['echo'] ) {
 			echo $output;
 		}
 
