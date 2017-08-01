@@ -53,6 +53,8 @@ Class RHSVote {
             $this->verify_params();
 
 			self::$instance = true;
+            
+            $this->votes_to_approval = get_option('vq_votes_to_approval');
 		}
 
 	}
@@ -108,7 +110,7 @@ Class RHSVote {
                     vote_source varchar(20) NOT NULL default '0.0.0.0'
                 )
             ";
-
+            global $wpdb;
             $wpdb->query( $createQ );
 
         }
@@ -121,7 +123,7 @@ Class RHSVote {
         }
 
         if(!get_option( 'vq_votes_to_approval' )){
-            add_option('vq_votes_to_approval', $this->days_for_expired_default);
+            add_option('vq_votes_to_approval', $this->votes_to_approval_default);
         }
 
         if(!get_option( 'vq_text_explanation' )){
@@ -145,11 +147,11 @@ Class RHSVote {
         }
 
         if(!get_option( 'vq_text_vote_update' )){
-            add_option('vq_text_vote_update',  'Parabéns, seu voto foi contabilizado, aguarde e veremos se ele será aprovado.');
+            add_option('vq_text_vote_update',  'Parabéns, seu voto foi contabilizado!');
         }
 
         if(!get_option( 'vq_text_post_promoted' )){
-            add_option('vq_text_post_promoted',  'Parabens, com o seu voto o post será aprovado e irá para a página incial');
+            add_option('vq_text_post_promoted',  'Parabens, seu voto foi contabilizado e o post foi promovido a página inicial!');
         }
 
     }
@@ -470,7 +472,7 @@ Class RHSVote {
 
 	function check_votes_to_upgrade( $postID ) {
 
-		if ( $this->get_total_votes( $postID ) < $this->votes_to_approval ) {
+        if ( $this->get_total_votes( $postID ) < $this->votes_to_approval ) {
 			return;
 		}
 
@@ -558,9 +560,47 @@ Class RHSVote {
             'vq_text_explanation'       => array(
                 'name'    => __( "Texto de informação:" ),
                 'type'    => 'text',
-                'help' => 'Texto que aparecerá quando o usuário não tiver permissão.',
+                'help' => 'Texto generico de erro ao votar, caso não caia em nenhuma das outras condições.',
                 'default' => $this->votes_to_text_help
             ),
+            
+            'vq_text_vote_old_posts'       => array(
+                'name'    => __( "Alerta de post antigo:" ),
+                'type'    => 'text',
+                'help' => 'Texto que aparecerá quando o usuário tentar votar em um post mais antigo do que o configurado para receber votos.',
+                'default' => $this->votes_to_text_help
+            ),
+            'vq_text_vote_posts_again'       => array(
+                'name'    => __( "Alerta ao tentar votar de novo:" ),
+                'type'    => 'text',
+                'help' => 'Texto que aparecerá quando o usuário tentar votar em um mesmo post mais de uma vez.',
+                'default' => $this->votes_to_text_help
+            ),
+            'vq_text_vote_own_posts'       => array(
+                'name'    => __( "Alerta ao votar no próprio post:" ),
+                'type'    => 'text',
+                'help' => 'Texto que aparecerá quando o usuário tentar votar no próprio post (e não tiver permissão pra isso).',
+                'default' => $this->votes_to_text_help
+            ),
+            'vq_text_vote_posts'       => array(
+                'name'    => __( "Texto de informação:" ),
+                'type'    => 'text',
+                'help' => 'Texto que aparecerá quando o usuário não tiver permissão para votar - ainda não for um votante.',
+                'default' => $this->votes_to_text_help
+            ),
+            'vq_text_vote_update'       => array(
+                'name'    => __( "Texto de informação:" ),
+                'type'    => 'text',
+                'help' => 'Texto que aparecerá quando o voto for registrado com sucesso.',
+                'default' => $this->votes_to_text_help
+            ),
+            'vq_text_post_promoted'       => array(
+                'name'    => __( "Texto de informação:" ),
+                'type'    => 'text',
+                'help' => 'Texto que aparecerá quando o voto for registrado com sucesso e o post for promovido.',
+                'default' => $this->votes_to_text_help
+            ),
+            
             'vq_page_explanation'       => array(
                 'name'    => __( "Página de informação:" ),
                 'type'    => 'select',
